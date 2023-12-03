@@ -12,28 +12,41 @@ const winningCombos = [
   ];
 /*----- app's state (variables) -----*/
 const [board, setBoard] = React.useState(["","","","","","","","",""])
-let turn = 'X';
+const [turn, setTurn] = React.useState('X');
 let win;
 let gameOver = false
 
 function handleTurn(event) {
   console.log(event.target, event.target.id)
   let idx = event.target.id
-  if (gameOver == false) {
+  
+    
     let newBoard = [...board]
     newBoard[idx] = turn
     setBoard(newBoard)
-    turn = turn === 'X' ? 'O' : 'X'
-    //  win = getWinner()
-    // render()
-  }
+    let nextTurn = turn === 'X' ? 'O' : 'X'
+    setTurn(nextTurn)
+    
+    
+  
 }
+
+
+function getWinner() {
+  let winner = null;
+  winningCombos.forEach(function(combo, index) {
+      if (board[combo[0]] && board[combo[0]] === board[combo[1]] && board[combo[0]] === board[combo[2]]) winner = board[combo[0]];
+    });
+    return winner ? winner : board.includes('') ? null : 'T';
+  
+}
+
 
     return (
         <div>
           <h1>Tic-React-Toe</h1>
 
-          <h2> It's X's turn!</h2>
+          <h2> It's {turn}'s turn!</h2>
         <div class = "flex-container flex-column">
         <div class="flex-container flex-wrap" id="board" onClick={handleTurn}>
           {board.map((value, idx) => {
